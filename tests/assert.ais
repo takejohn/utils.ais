@@ -1,0 +1,8 @@
+### imports [
+    "../src/assert.ais"
+]
+
+Assert:assert(true)
+Assert:equals(1, 1)
+Assert:equals('a', 'a')
+Assert:equals(true, true)

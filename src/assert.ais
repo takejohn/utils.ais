@@ -1,0 +1,36 @@
+:: Assert {
+    /**
+     * @param {any} value
+     * @returns {str}
+     */
+    @_repl(value) {
+        if Core:type(value) == 'str' {
+            `"{value}"`
+        } else {
+            Core:to_str(value)
+        }
+    }
+
+    /**
+     * 値がtrueでない場合、プログラムを強制終了する。
+     * @param {bool} value trueであることが期待される値。
+     * @returns {void}
+     */
+    @assert(value) {
+        if (value != true) {
+            Core:abort(`Assertion failed: value is not true (value = {_repl(value)})`)
+        }
+    }
+
+    /**
+     * 値が等しくない場合、プログラムを強制終了する。
+     * @param {any} left 1つ目の値。
+     * @param {any} right 2つ目の値。
+     * @returns {void}
+     */
+    @equals(left, right) {
+        if (left != right) {
+            Core:abort(`Assertion failed: values are not equal (left = {_repl(left)}, right = {_repl(right)})`)
+        }
+    }
+}
