@@ -2,7 +2,15 @@
     "../src/assert.ais"
 ]
 
-Assert:assert(true)
-Assert:equals(1, 1)
-Assert:equals('a', 'a')
-Assert:equals(true, true)
+#[test]
+@assert_success() {
+    Assert:assert(true)
+}
+
+#[test]
+@equals_success() {
+    Assert:equals(1, 1)
+    Assert:equals('a', 'a')
+    Assert:equals(true, true)
+    Assert:equals(false, false)
+}
