@@ -1,0 +1,11 @@
+### imports [
+    '../src/re.ais'
+    '../src/assert.ais'
+]
+
+#[test]
+@empty() {
+    let re = Re:compile('')
+    Assert:assert(re.matches(''))
+    Assert:assert(!re.matches('abc'))
+}

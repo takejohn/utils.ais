@@ -1,0 +1,26 @@
+:: Re {
+    /**
+     * @typedef {obj} Re 正規表現オブジェクト。
+     * @prop {@(str) => bool} matches 文字列が正規表現に一致するか。
+     */
+
+    /**
+     * @type {_ReInner}
+     */
+    let _EMPTY = {
+        matches: @(s) {
+            return s == ''
+        }
+    }
+
+    /**
+     * @param {str} pattern
+     * @returns {Re}
+     */
+    @compile(pattern) {
+        if pattern == '' {
+            return _EMPTY
+        }
+        Core:abort('TODO')
+    }
+}
