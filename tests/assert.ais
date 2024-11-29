@@ -18,9 +18,40 @@
     Assert:equals('a', 'a')
     Assert:equals(true, true)
     Assert:equals(false, false)
+    Assert:equals([1, 'a', true], [1, 'a', true])
+    Assert:equals([1, [2, [3, []]]], [1, [2, [3, []]]])
+    Assert:equals({ a: 1, b: 'a', c: true }, { a: 1, b: 'a', c: true })
+}
+
+#[test]
+@equals_circular_arr() {
+    let x = []
+    x.push(x)
+    let y = []
+    y.push(y)
+    Assert:equals(x, y)
+}
+
+#[test]
+@equals_circular_obj() {
+    let x = {}
+    x.a = x
+    let y = {}
+    y.a = y
+    Assert:equals(x, y)
 }
 
 #[test 'err']
 @equals_fail() {
     Assert:equals(1, 2)
+}
+
+#[test 'err']
+@equals_arr_fail() {
+    Assert:equals([1], [2])
+}
+
+#[test 'err']
+@equals_obj_fail() {
+    Assert:equals({ a: 1 }, { a: 2 })
 }

@@ -12,12 +12,83 @@
     }
 
     /**
+     * @param {any} left
+     * @param {any} right
+     * @returns {never}
+     */
+    @_assertion_failed(left, right) {
+        Core:abort(`Assertion failed: values are not equal (left = {_repl(left)}, right = {_repl(right)})`)
+    }
+
+    /**
+     * @param {any} left
+     * @param {any} right
+     * @param {arr<[arr, arr]>} visited_arrays
+     * @param {arr<[obj, obj]>} visited_objects
+     * @returns {bool}
+     */
+    @_are_equal(left, right, visited_arrays, visited_objects) {
+        if left == right {
+            return true
+        }
+
+        let left_type = Core:type(left)
+        let right_type = Core:type(right)
+
+        if left_type == 'arr' && right_type == 'arr' {
+            let len = left.len
+            if len != right.len {
+                return false
+            }
+            each let pair, visited_arrays {
+                if left == pair[0] && right == pair[1] {
+                    return true
+                }
+            }
+            visited_arrays.push([left, right])
+            for let i, len {
+                if !_are_equal(left[i], right[i], visited_arrays, visited_objects) {
+                    return false
+                }
+            }
+            visited_arrays.pop()
+            return true
+        }
+
+        if left_type == 'obj' && right_type == 'obj' {
+            each let pair, visited_objects {
+                if left == pair[0] && right == pair[1] {
+                    return true
+                }
+            }
+            visited_objects.push([left, right])
+            each let key, Obj:keys(left) {
+                if !Obj:has(right, key) {
+                    return false
+                }
+                if !_are_equal(left[key], right[key], visited_arrays, visited_objects) {
+                    return false
+                }
+            }
+            visited_objects.pop()
+            each let key, Obj:keys(right) {
+                if !Obj:has(left, key) {
+                    return false
+                }
+            }
+            return true
+        }
+
+        return false
+    }
+
+    /**
      * 値がtrueでない場合、プログラムを強制終了する。
      * @param {bool} value trueであることが期待される値。
      * @returns {void}
      */
     @assert(value) {
-        if (value != true) {
+        if value != true {
             Core:abort(`Assertion failed: value is not true (value = {_repl(value)})`)
         }
     }
@@ -29,8 +100,12 @@
      * @returns {void}
      */
     @equals(left, right) {
-        if (left != right) {
-            Core:abort(`Assertion failed: values are not equal (left = {_repl(left)}, right = {_repl(right)})`)
+        if left == right {
+            return null
+        }
+
+        if !_are_equal(left, right, [], []) {
+            _assertion_failed(left, right)
         }
     }
 }

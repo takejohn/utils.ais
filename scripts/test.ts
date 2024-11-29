@@ -89,7 +89,7 @@ class Context {
 			await this.executeFunction(name, fn);
 			this.acceptError = false;
 			if (this.acceptedError == null) {
-				this.addError({ message: `Expected error `})
+				this.addError({ message: `function \`${name}\`: Expected error `})
 			} else {
 				this.acceptedError = undefined;
 			}
