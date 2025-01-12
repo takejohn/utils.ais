@@ -7,7 +7,7 @@
     Assert:assert(true)
 }
 
-#[test 'err']
+#[test 'should_abort']
 @assert_fail() {
     Assert:assert(false)
 }
@@ -41,17 +41,17 @@
     Assert:equals(x, y)
 }
 
-#[test 'err']
+#[test 'should_abort']
 @equals_fail() {
     Assert:equals(1, 2)
 }
 
-#[test 'err']
+#[test 'should_abort']
 @equals_arr_fail() {
     Assert:equals([1], [2])
 }
 
-#[test 'err']
+#[test 'should_abort']
 @equals_obj_fail() {
     Assert:equals({ a: 1 }, { a: 2 })
 }
