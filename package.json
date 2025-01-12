@@ -8,8 +8,6 @@
     "test": "tsx ./scripts/test.ts"
   },
   "devDependencies": {
-    "@types/node": "^22.10.1",
-    "aisenv": "^0.3.2",
-    "tsx": "^4.19.2"
+    "aisenv": "^0.3.2"
   }
 }
