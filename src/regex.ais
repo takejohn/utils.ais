@@ -10,6 +10,7 @@
      * @typedef {obj} Result
      * @prop {num} start 一致した文字列の開始位置
      * @prop {num} end 一致した文字列の終了位置
+     * @prop {@() => Result | null} backtrack バックトラックを行う関数
      */
 
     /**
@@ -21,7 +22,36 @@
         if (Core:type(pattern) != 'str') {
             Core:abort('Regex:compile の第1引数は文字列である必要があります。')
         }
-        return _literal(pattern)
+        _literal(pattern)
+    }
+
+    /**
+     * @param {Regex} regex コンパイル済み正規表現
+     * @param {str} input 対象の文字列
+     * @returns {num} 指定された文字列の中で正規表現に最初に一致した位置。
+     *                一致する文字列が見つからなかった場合、-1。
+     */
+    @search(regex: obj, input: str): num {
+        let result = regex(input, 0)
+        if result == null {
+            -1
+        } else {
+            result.start
+        }
+    }
+
+    /**
+     * @param {Regex} regex コンパイル済み正規表現
+     * @param {str} input 対象の文字列
+     * @returns {bool} 指定された文字列の中に正規表現に一致する部分文字列があった場合、true。
+     *                 そうでなければ、false
+     */
+    @test(regex: obj, input: str): bool {
+        regex(input, 0) != null
+    }
+
+    @_NULL(): null {
+        null
     }
 
     /**
@@ -32,9 +62,10 @@
         @(input: str, from: num): any {
             let start = input.index_of(s, from)
             if start < 0 {
-                return null
+                null
+            } else {
+                { start: start, end: start + s.len, backtrack: _NULL }
             }
-            return { start: start, end: start + s.len }
         }
     }
 }
