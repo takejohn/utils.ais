@@ -1,0 +1,26 @@
+### imports [
+    '../src/assert.ais',
+    '../src/regex.ais',
+]
+
+#[test "should_abort"]
+@compile_not_str() {
+    Regex:compile(42)
+}
+
+#[test]
+@compile_empty() {
+    let regex = Regex:compile('')
+    Assert:equals(regex('abc', 0), { start: 0, end: 0 })
+    Assert:equals(regex('abc', 1), { start: 1, end: 1 })
+}
+
+#[test]
+@compile_literal() {
+    let regex = Regex:compile('abc')
+    Assert:equals(regex('abcdef', 0), { start: 0, end: 3 })
+    Assert:equals(regex('123abc', 0), { start: 3, end: 6 })
+    Assert:equals(regex('123abc', 3), { start: 3, end: 6 })
+    Assert:equals(regex('xyz', 0), null)
+    Assert:equals(regex('abcdef', 3), null)
+}

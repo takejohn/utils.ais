@@ -1,0 +1,40 @@
+:: Regex {
+    /**
+     * @callback Regex
+     * @param {str} input 入力文字列
+     * @param {num} from 開始位置
+     * @returns {Result | null} 検索結果
+     */
+
+    /**
+     * @typedef {obj} Result
+     * @prop {num} start 一致した文字列の開始位置
+     * @prop {num} end 一致した文字列の終了位置
+     */
+
+    /**
+     * 正規表現をコンパイルする。
+     * @param {str} pattern 正規表現パターン
+     * @returns {Regex} コンパイル済み正規表現
+     */
+    @compile(pattern: str): obj {
+        if (Core:type(pattern) != 'str') {
+            Core:abort('Regex:compile の第1引数は文字列である必要があります。')
+        }
+        return _literal(pattern)
+    }
+
+    /**
+     * 文字列に完全一致する正規表現。
+     * @returns {Regex}
+     */
+    @_literal(s: str): @(str, num) => any {
+        @(input: str, from: num): any {
+            let start = input.index_of(s, from)
+            if start < 0 {
+                return null
+            }
+            return { start: start, end: start + s.len }
+        }
+    }
+}
